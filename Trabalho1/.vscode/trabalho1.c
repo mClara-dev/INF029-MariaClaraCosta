@@ -134,7 +134,6 @@ int q1(char data[])
       return 0;
 }
 
-
 /*
  Q2 = diferença entre duas datas
  @objetivo
