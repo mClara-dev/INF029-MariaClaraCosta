@@ -24,7 +24,7 @@
 #include "trabalho1.h" 
 #include <stdlib.h>
 
-#define ANO_ATUAL 2025
+#define ANO_ATUAL 25
 
 DataQuebrada quebraData(char data[]);
 int ehbissexto(int ano);
@@ -95,43 +95,20 @@ int teste(int a)
  */
 int q1(char data[])
 {
-  int datavalida = 1;
-  //quebrar a string data em strings sDia, sMes, sAno
+	int datavalida = 1;
+	DataQuebrada dq = quebrarData(data);
   
-  DataQuebrada dq;
-  dq = quebraData(data);
-  int dia = dq.iDia;
-  int mes = dq.iMes;
-  int ano = dq.iAno;
-  
-  if(!dq.valido){
-      datavalida = 0;
-      return datavalida; // se a validacao falha, a resposta da funcao eh invalida
-  }
-  
-  if(ano <= 0 || ano > ANO_ATUAL){
-      datavalida = 0;
-      return datavalida;
-  }
-  
-  if(mes < 1 || mes > 12){
-      datavalida = 0;
-      return datavalida;
-  }
-  
-  if(dia <= 0 || dia > diasNoMes(mes, ano)){
-      datavalida = 0;
-      return datavalida;
-  }
-  
-  return 1;
-
-  //printf("%s\n", data);
-
-  if (datavalida)
-      return 1;
-  else
-      return 0;
+    
+	if(!dq.valido) valida = 0;
+    int dias_meses[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if(bissexto(dq.iAno)) dias_meses[1]++;
+    if(dq.iAno < 100) dq.iAno += (dq.iAno > ANO_ATUAL) ? 1900 : 2000;
+    
+    if(dq.iAno < 1900 || dq.iAno > (ANO_ATUAL + 2000)) valida = 0;
+    if(dq.iMes < 1 || dq.iMes > 12) valida = 0;
+    if(dq.iDia < 1 || dq.iDia > dias_meses[dq.iMes - 1]) valida = 0;
+        
+    return valida;
 }
 
 /*
