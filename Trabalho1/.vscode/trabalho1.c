@@ -28,8 +28,7 @@
 
 DataQuebrada quebraData(char data[]);
 int ehbissexto(int ano);
-int diasNoMes(int mes, int ano);
-
+int DataMaior(DataQuebrada dqInicial, DataQuebrada dqFinal);
 /*
 ## função utilizada para testes  ##
 
@@ -139,16 +138,31 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
       return dma;
     }else{
       //verifique se a data final não é menor que a data inicial
-      
-      //calcule a distancia entre as datas
+        DataQuebrada dqInicial = quebraData(datainicial);
+        DataQuebrada dqFinal = quebraData(datafinal);
+        if (!datafinalehmaior(dqInicial, dqFinal)){
+            dma.retorno = 4;
+            return dma;
+        }
+        
+        dma.qtdDias = dqFinal.iDia - dqInicial.iDia;
+        dma.qtdMeses = dqFinal.iMes - dqInicial.iMes;
+        dma.qtdAnos = dqFinal.iAno - dqInicial.iAno;
 
-
-      //se tudo der certo
-      dma.retorno = 1;
-      return dma;
-      
+        if(dma.qtdDias < 0){
+            int ano_e = (dqFinal.iMes == 1) ? dqFinal.iAno - 1 : dqFinal.iAno; //se o mes final for 1, o ano do emprestimo eh o anterior
+            int mes_e = (dqFinal.iMes == 1) ? 12 : dqFinal.iMes - 1; //se o mes final for 1, o mes do emprestimo eh o anterior - dezembro
+            dma.qtdDias += diasNoMes(mes_e, ano_e);
+            dma.qtdMeses--;
+        }
+        if(dma.qtdMeses < 0){
+            dma.qtdAnos--;
+            dma.qtdMeses += 12;
+        }
+        
+        dma.retorno = 1;
+        return dma;
     }
-    
 }
 
 /*
@@ -202,7 +216,12 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
 
 int q5(int num)
 {
-
+	long long int invertido = 0;
+    while (num > 0) {
+    	invertido = invertido * 10 + (num % 10);
+    	num = num / 10;
+    }
+    num = invertido;
     return num;
 }
 
@@ -311,3 +330,14 @@ int DiasNoMes(int mes, ano){
     } else return dias[mes - 1];
 }
 
+int DataMaior(DataQuebrada dqInicial, DataQuebrada dqFinal){
+    if (dqFinal.iAno > dqInicial.iAno){
+        return 1;
+    }else if (dqFinal.iAno == dqInicial.iAno && dqFinal.iMes > dqInicial.iMes){
+        return 1;
+    }else if (dqFinal.iAno == dqInicial.iAno && dqFinal.iMes == dqInicial.iMes && dqFinal.iDia > dqInicial.iDia){
+        return 1;
+    }else{
+        return 0;
+    }
+}
