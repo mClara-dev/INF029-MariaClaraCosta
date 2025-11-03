@@ -350,3 +350,26 @@ int DataMaior(DataQuebrada dqInicial, DataQuebrada dqFinal){
         return 0;
     }
 }
+
+//funções auxiliares p q4 >>> ainda incompletas
+char ConvertepMinusculo(char c){
+    if(c >= 'A' && c <= 'Z'){
+        return c + 32;
+    }
+    return c;
+}
+
+char NormalizarString(char c){
+    c = ConvertepMinusculo(c);
+    
+    case 'ã' : case 'â' : case 'á' : case 'à':
+        return 'a';
+    case 'é' : case 'è' : case 'ê' :
+        return 'e';
+    case 'í' : case 'ì' :
+        return 'i';
+    case 'ã' : case 'â' : case 'á' : case 'à':
+        return 'a';
+    case 'ã' : case 'â' : case 'á' : case 'à':
+        return 'a';
+}
