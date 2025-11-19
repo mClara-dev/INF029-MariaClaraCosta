@@ -32,6 +32,12 @@
 DataQuebrada quebraData(char data[]);
 int ehBissexto(int ano);
 int DataMaior(DataQuebrada dqInicial, DataQuebrada dqFinal);
+int separaDigitos(int numero, int digitos[]);
+char ConvertepMinusculo(char c);
+void NormalizarString(char *texto);
+int DataMaior(DataQuebrada dqInicial, DataQuebrada dqFinal);
+int DiasNoMes(int mes, int ano);
+
 /*
 ## função utilizada para testes  ##
 
