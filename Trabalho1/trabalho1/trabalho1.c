@@ -217,46 +217,22 @@ int q3(char *texto, char c, int isCaseSensitive)
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-    int qtdOcorrencias = 0;
-    int lenTexto = strlen(strTexto);
-    int lenBusca = strlen(strBusca);
+    formatarPalavra(strTexto);
+    formatarPalavra(strBusca);
 
-    char textoNorm[250];
-    char buscaNorm[50];
-
-    int i;
-    for (i = 0; strTexto[i] != '\0'; i++) {
-        textoNorm[i] = strTexto[i];
-    }
-    textoNorm[i] = '\0';
-
-    int j;
-    for (j = 0; strBusca[j] != '\0'; j++) {
-        buscaNorm[j] = strBusca[j];
-    }
-    buscaNorm[j] = '\0';
-
-    formatarPalavra(textoNorm);
-    formatarPalavra(buscaNorm);
-
-    for (int k = 0; k < 30; k++){
-        posicoes[k] = -1;
-    }
-
-    for (int i = 0; textoNorm[i] != '\0'; i++) {
-        int encontrou = 1;
-
-        for (int j = 0; j < lenBusca; j++) {
-            if (textoNorm[i + j] != buscaNorm[j]) {
-                encontrou = 0;
+    for (tam = 0; strBusca[tam]; tam++);
+    for (i = 0, k = 0; strTexto[i] != '\0'; i++) {
+        for (j = 0; strBusca[j] != '\0'; j++) {
+            if (strTexto[i + j] != strBusca[j]) {
                 break;
             }
         }
 
-        if (encontrou && lenBusca > 0) {
-            posicoes[qtdOcorrencias * 2] = i + 1;
-            posicoes[qtdOcorrencias * 2 + 1] = i + lenBusca;
+        if (tam == j) {
+            posicoes[k++] = i + 1;
+            posicoes[k++] = i + tam;
             qtdOcorrencias++;
+            i++;
         }
     }
 
