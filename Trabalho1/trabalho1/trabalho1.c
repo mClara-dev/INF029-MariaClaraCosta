@@ -217,33 +217,52 @@ int q3(char *texto, char c, int isCaseSensitive)
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-    formatarPalavra(strTexto);
-    formatarPalavra(strBusca);
     int qtdOcorrencias = 0;
+    int lenTexto = strlen(strTexto);
     int lenBusca = strlen(strBusca);
-    
-    for (int i = 0; i < 30; i++){
-        posicoes[i] = -1;
+
+    char textoNorm[250];
+    char buscaNorm[50];
+
+    int i;
+    for (i = 0; strTexto[i] != '\0'; i++) {
+        textoNorm[i] = strTexto[i];
     }
-    
-    for (int i = 0; strTexto[i] != '\0'; i++){
+    textoNorm[i] = '\0';
+
+    int j;
+    for (j = 0; strBusca[j] != '\0'; j++) {
+        buscaNorm[j] = strBusca[j];
+    }
+    buscaNorm[j] = '\0';
+
+    formatarPalavra(textoNorm);
+    formatarPalavra(buscaNorm);
+
+    for (int k = 0; k < 30; k++){
+        posicoes[k] = -1;
+    }
+
+    for (int i = 0; textoNorm[i] != '\0'; i++) {
         int encontrou = 1;
-        
-        for (int j = 0; j < lenBusca; j++){
-            if (strTexto[i + j] != strBusca[j]){
+
+        for (int j = 0; j < lenBusca; j++) {
+            if (textoNorm[i + j] != buscaNorm[j]) {
                 encontrou = 0;
                 break;
             }
         }
-        
-        if (encontrou && lenBusca > 0){
-            posicoes[qtdOcorrencias * 2] = i + 1;  
-            posicoes[qtdOcorrencias * 2 + 1] = i + lenBusca;  
+
+        if (encontrou && lenBusca > 0) {
+            posicoes[qtdOcorrencias * 2] = i + 1;
+            posicoes[qtdOcorrencias * 2 + 1] = i + lenBusca;
             qtdOcorrencias++;
         }
     }
+
     return qtdOcorrencias;
 }
+
 /*
  Q5 = inverte número
  @objetivo
@@ -256,13 +275,24 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
 
 int q5(int num)
 {
-	long long int invertido = 0;
-    while (num > 0) {
-    	invertido = invertido * 10 + (num % 10);
-    	num = num / 10;
-    }
-    num = invertido;
-    return num;
+  int numInvertido = 0;
+  int negativo = 0;
+  if (num == 0)
+    return 0;
+  if (num < 0)
+  {
+    negativo = 1;
+    num = -num;
+  }
+  while (num > 0)
+  {
+    int digito = num % 10;
+    numInvertido = numInvertido * 10 + digito;
+    num = num / 10;
+  }
+  if (negativo)
+    numInvertido = -numInvertido;
+  return numInvertido;
 }
 
 /*
