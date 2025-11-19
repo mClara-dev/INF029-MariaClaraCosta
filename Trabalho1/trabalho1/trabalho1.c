@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include "trabalho1.h" 
 #include <stdlib.h>
+#include <string.h>
 
 #define ANO_ATUAL 25
 #define LINHAS 8
@@ -29,7 +30,7 @@
 #define MAX_PALAVRA 5
 
 DataQuebrada quebraData(char data[]);
-int ehbissexto(int ano);
+int ehBissexto(int ano);
 int DataMaior(DataQuebrada dqInicial, DataQuebrada dqFinal);
 /*
 ## função utilizada para testes  ##
@@ -102,7 +103,7 @@ int q1(char data[])
     
 	if(!dq.valido) valida = 0;
     int dias_meses[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    if(ehbissexto(dq.iAno)) dias_meses[1]++;
+    if(ehBissexto(dq.iAno)) dias_meses[1]++;
     if(dq.iAno < 100) dq.iAno += (dq.iAno > ANO_ATUAL) ? 1900 : 2000;
     
     if(dq.iAno < 1900 || dq.iAno > (ANO_ATUAL + 2000)) valida = 0;
@@ -219,33 +220,6 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
     formatarPalavra(strTexto);
     formatarPalavra(strBusca);
     int qtdOcorrencias = 0;
-    for (int i = 0; i < 30; i++){
-        posicoes[i] = -1;
-    }
-    int j = 0;
-    for (int i = 0; strTexto[i] != '\0'; i++){
-        if (strTexto[i] == strBusca[j]){
-            if (j == 0){
-                posicoes[qtdOcorrencias * 2] = i + 1;
-            }
-            j++;
-            if (strBusca[j] == '\0'){
-                posicoes[qtdOcorrencias * 2 + 1] = i + 1;
-                qtdOcorrencias++;
-                j = 0;
-            }
-        }else{
-            j = 0;
-        }
-    }
-    return qtdOcorrencias;
-}
-
-int q4(char *strTexto, char *strBusca, int posicoes[30])
-{
-    formatarPalavra(strTexto);
-    formatarPalavra(strBusca);
-    int qtdOcorrencias = 0;
     int lenBusca = strlen(strBusca);
     
     for (int i = 0; i < 30; i++){
@@ -319,7 +293,7 @@ int q6(int numerobase, int numerobusca)
     for (int i = 0; i <= tamBase - tamBusca;) {
         int encontrado = 1;
         for (int j = 0; j < tamBusca; j++) {
-            if (dBase[i + j] != dBusca[j]) {
+            if (digitosBase[i + j] != digitosBusca[j]) {
                 encontrado = 0;
                 break;
             }
