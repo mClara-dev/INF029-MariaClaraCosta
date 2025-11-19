@@ -102,7 +102,7 @@ int q1(char data[])
     
 	if(!dq.valido) valida = 0;
     int dias_meses[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    if(bissexto(dq.iAno)) dias_meses[1]++;
+    if(ehbissexto(dq.iAno)) dias_meses[1]++;
     if(dq.iAno < 100) dq.iAno += (dq.iAno > ANO_ATUAL) ? 1900 : 2000;
     
     if(dq.iAno < 1900 || dq.iAno > (ANO_ATUAL + 2000)) valida = 0;
