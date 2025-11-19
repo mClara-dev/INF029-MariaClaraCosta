@@ -19,12 +19,14 @@
 // Última atualização: 07/05/2021 - 19/08/2016 - 17/10/2025
 
 // #################################################
-
 #include <stdio.h>
 #include "trabalho1.h" 
 #include <stdlib.h>
 
 #define ANO_ATUAL 25
+#define LINHAS 8
+#define COLUNAS 10
+#define MAX_PALAVRA 5
 
 DataQuebrada quebraData(char data[]);
 int ehbissexto(int ano);
@@ -177,16 +179,22 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
  */
 int q3(char *texto, char c, int isCaseSensitive)
 {
+    formatarPalavra(texto);
+    char c_formatado = NormalizarChar(c);
     int qtdOcorrencias = 0;
     
-    if(isCaseSensitive){
-        for(i = 0; texto[i] != '\0'; i++){
-            qtdOcorrencias += (texto[i] == c) ? 1 : 0;
-        }
-    }else{
-        for(i = 0; texto[i] != '\0'; i++){
-            qtdOcorrencias += (texto[i] == c || texto[i] == c - 32 || texto[i] == c + 32) ? 1 : 0;
+    if (isCaseSensitive == 1){
+        for (int i = 0; texto[i] != '\0'; i++){
+            if (texto[i] == c_formatado){
+                qtdOcorrencias++;
+            }
         }    
+    }else{
+        for (int i = 0; texto[i] != '\0'; i++){
+            if (texto[i] == c_formatado){
+                qtdOcorrencias++;
+            }
+        }
     }
     return qtdOcorrencias;
 }
@@ -207,9 +215,30 @@ int q3(char *texto, char c, int isCaseSensitive)
 
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
+int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-    int qtdOcorrencias = -1;
-
+    formatarPalavra(strTexto);
+    formatarPalavra(strBusca);
+    int qtdOcorrencias = 0;
+    for (int i = 0; i < 30; i++){
+        posicoes[i] = -1;
+    }
+    int j = 0;
+    for (int i = 0; strTexto[i] != '\0'; i++){
+        if (strTexto[i] == strBusca[j]){
+            if (j == 0){
+                posicoes[qtdOcorrencias * 2] = i + 1;
+            }
+            j++;
+            if (strBusca[j] == '\0'){
+                posicoes[qtdOcorrencias * 2 + 1] = i + 1;
+                qtdOcorrencias++;
+                j = 0;
+            }
+        }else{
+            j = 0;
+        }
+    }
     return qtdOcorrencias;
 }
 
@@ -246,10 +275,36 @@ int q5(int num)
 
 int q6(int numerobase, int numerobusca)
 {
-    int qtdOcorrencias;
+    int qtdOcorrencias = 0;
+    int dBase[50];
+    int dBusca[50];
+    int tamBase = 0;
+    int tamBusca = 0;
+
+    tamBase = separaDigitos(numerobase, digitosBase);
+    tamBusca = separaDigitos(numerobusca, digitosBusca);
+
+    if (tamBusca == 0 || tamBusca > tamBase) {
+        return 0;
+    }
+
+    for (int i = 0; i <= tamBase - tamBusca;) {
+        int encontrado = 1;
+        for (int j = 0; j < tamBusca; j++) {
+            if (dBase[i + j] != dBusca[j]) {
+                encontrado = 0;
+                break;
+            }
+        }
+        if (encontrado) {
+            qtdOcorrencias++;   
+            i = i + tamBusca;
+        } else {
+            i++;
+        }
+    }
     return qtdOcorrencias;
 }
-
 /*
  Q7 = jogo busca palavras
  @objetivo
@@ -260,13 +315,61 @@ int q6(int numerobase, int numerobusca)
     1 se achou 0 se não achou
  */
 
- int q7(char matriz[8][10], char palavra[5])
- {
-     int achou;
-     return achou;
- }
+int q7(char matriz[8][10], char palavra[5])
+{
+    const int LINHAS = 8;
+    const int COLUNAS = 10;
+    int lenPalavra = strlen(palavra);
 
+    int direcoes[8][2] = {
+        {0, 1},   
+        {-1, 1},  
+        {-1, 0},  
+        {-1, -1}, 
+        {0, -1},  
+        {1, -1},  
+        {1, 0},   
+        {1, 1}    
+    };
 
+    if (lenPalavra == 0) {
+        return 0;
+    }
+
+    for (int i = 0; i < LINHAS; i++) {
+        for (int j = 0; j < COLUNAS; j++) {
+            if (matriz[i][j] == palavra[0]) {
+                for (int d = 0; d < 8; d++) {
+                    int di = direcoes[d][0];
+                    int dj = direcoes[d][1];
+                    
+                    int encontrou = 1;
+                    
+                    for (int k = 1; k < lenPalavra; k++) {
+                        int ci = i + k * di;
+                        int cj = j + k * dj;
+                        
+                        if (ci < 0 || ci >= LINHAS || cj < 0 || cj >= COLUNAS) {
+                            encontrou = 0;
+                            break;
+                        }
+
+                        if (matriz[ci][cj] != palavra[k]) {
+                            encontrou = 0;
+                            break;
+                        }
+                    }
+
+                    if (encontrou) {
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
+}
 
 DataQuebrada quebraData(char data[]){
     DataQuebrada dq;
@@ -359,17 +462,52 @@ char ConvertepMinusculo(char c){
     return c;
 }
 
-char NormalizarString(char c){
+char NormalizarChar(char c){
     c = ConvertepMinusculo(c);
     
-    case 'ã' : case 'â' : case 'á' : case 'à':
-        return 'a';
-    case 'é' : case 'è' : case 'ê' :
-        return 'e';
-    case 'í' : case 'ì' :
-        return 'i';
-    case 'ã' : case 'â' : case 'á' : case 'à':
-        return 'a';
-    case 'ã' : case 'â' : case 'á' : case 'à':
-        return 'a';
+    switch (c){
+        case 'ã' : case 'â' : case 'á' : case 'à': case 'ä':
+            return 'a';
+        case 'é' : case 'è' : case 'ê' : case 'ë':
+            return 'e';
+        case 'í' : case 'ì' : case 'î' : case 'ï':
+            return 'i';
+        case 'õ' : case 'ô' : case 'ó' : case 'ò': case 'ö':
+            return 'o';
+        case 'ú' : case 'ù' : case 'û' : case 'ü':
+            return 'u';
+        case 'ç' :
+            return 'c';
+        default:
+            return c;
+    }
+}
+
+void formatarPalavra(char *str){
+    for(int i = 0; str[i] != '\0'; i++){
+        str[i] = NormalizarChar(str[i]);
+    }
+}
+
+int separaDigitos(int numero, int digitos[]) {
+    if (numero == 0) {
+        digitos[0] = 0;
+        return 1;
+    }
+    
+    int quantidade = 0;
+    int numeroTemporario = numero;
+    
+    while (numeroTemporario > 0) {
+        quantidade++;
+        numeroTemporario = numeroTemporario / 10;
+    }
+    
+    numeroTemporario = numero;
+    for (int posicao = quantidade - 1; posicao >= 0; posicao--) {
+        digitos[posicao] = numeroTemporario % 10; 
+        numeroTemporario = numeroTemporario / 10;  
+    }
+    
+    return quantidade;
 }
