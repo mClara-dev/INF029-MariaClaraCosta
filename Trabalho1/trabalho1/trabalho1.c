@@ -332,8 +332,6 @@ int q6(int numerobase, int numerobusca)
 
 int q7(char matriz[8][10], char palavra[5])
 {
-    const int LINHAS = 8;
-    const int COLUNAS = 10;
     int lenPalavra = strlen(palavra);
 
     int direcoes[8][2] = {
