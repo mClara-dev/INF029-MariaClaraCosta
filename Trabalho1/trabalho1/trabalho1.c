@@ -219,26 +219,33 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
     formatarPalavra(strTexto);
     formatarPalavra(strBusca);
-
-    for (tam = 0; strBusca[tam]; tam++);
-    for (i = 0, k = 0; strTexto[i] != '\0'; i++) {
-        for (j = 0; strBusca[j] != '\0'; j++) {
-            if (strTexto[i + j] != strBusca[j]) {
+	
+	int i, j, k, tam;
+    int qtdOcorrencias = 0;
+    int lenBusca = strlen(strBusca);
+    
+    for (int i = 0; i < 30; i++){
+        posicoes[i] = -1;
+    }
+    
+    for (int i = 0; strTexto[i] != '\0'; i++){
+        int encontrou = 1;
+        
+        for (int j = 0; j < lenBusca; j++){
+            if (strTexto[i + j] != strBusca[j]){
+                encontrou = 0;
                 break;
             }
         }
-
-        if (tam == j) {
-            posicoes[k++] = i + 1;
-            posicoes[k++] = i + tam;
+        
+        if (encontrou && lenBusca > 0){
+            posicoes[qtdOcorrencias * 2] = i + 1;  
+            posicoes[qtdOcorrencias * 2 + 1] = i + lenBusca;  
             qtdOcorrencias++;
-            i++;
         }
     }
-
     return qtdOcorrencias;
 }
-
 /*
  Q5 = inverte número
  @objetivo
