@@ -215,7 +215,6 @@ int q3(char *texto, char c, int isCaseSensitive)
 
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
-int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
     formatarPalavra(strTexto);
     formatarPalavra(strBusca);
