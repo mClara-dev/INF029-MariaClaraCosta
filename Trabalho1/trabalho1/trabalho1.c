@@ -96,8 +96,8 @@ int teste(int a)
  */
 int q1(char data[])
 {
-	int datavalida = 1;
-	DataQuebrada dq = quebrarData(data);
+	int valida = 1;
+	DataQuebrada dq = quebraData(data);
   
     
 	if(!dq.valido) valida = 0;
@@ -142,7 +142,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
       //verifique se a data final não é menor que a data inicial
         DataQuebrada dqInicial = quebraData(datainicial);
         DataQuebrada dqFinal = quebraData(datafinal);
-        if (!datafinalehmaior(dqInicial, dqFinal)){
+        if (!DataMaior(dqInicial, dqFinal)){
             dma.retorno = 4;
             return dma;
         }
@@ -154,7 +154,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
         if(dma.qtdDias < 0){
             int ano_e = (dqFinal.iMes == 1) ? dqFinal.iAno - 1 : dqFinal.iAno; //se o mes final for 1, o ano do emprestimo eh o anterior
             int mes_e = (dqFinal.iMes == 1) ? 12 : dqFinal.iMes - 1; //se o mes final for 1, o mes do emprestimo eh o anterior - dezembro
-            dma.qtdDias += diasNoMes(mes_e, ano_e);
+            dma.qtdDias += DiasNoMes(mes_e, ano_e);
             dma.qtdMeses--;
         }
         if(dma.qtdMeses < 0){
@@ -179,19 +179,19 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
  */
 int q3(char *texto, char c, int isCaseSensitive)
 {
-    formatarPalavra(texto);
-    char c_formatado = NormalizarChar(c);
     int qtdOcorrencias = 0;
     
     if (isCaseSensitive == 1){
         for (int i = 0; texto[i] != '\0'; i++){
-            if (texto[i] == c_formatado){
+            if (texto[i] == c){
                 qtdOcorrencias++;
             }
         }    
     }else{
+        char c_normalizado = NormalizarChar(c);
         for (int i = 0; texto[i] != '\0'; i++){
-            if (texto[i] == c_formatado){
+            char texto_char_normalizado = NormalizarChar(texto[i]);
+            if (texto_char_normalizado == c_normalizado){
                 qtdOcorrencias++;
             }
         }
@@ -241,6 +241,35 @@ int q4(char *strTexto, char *strBusca, int posicoes[30])
     return qtdOcorrencias;
 }
 
+int q4(char *strTexto, char *strBusca, int posicoes[30])
+{
+    formatarPalavra(strTexto);
+    formatarPalavra(strBusca);
+    int qtdOcorrencias = 0;
+    int lenBusca = strlen(strBusca);
+    
+    for (int i = 0; i < 30; i++){
+        posicoes[i] = -1;
+    }
+    
+    for (int i = 0; strTexto[i] != '\0'; i++){
+        int encontrou = 1;
+        
+        for (int j = 0; j < lenBusca; j++){
+            if (strTexto[i + j] != strBusca[j]){
+                encontrou = 0;
+                break;
+            }
+        }
+        
+        if (encontrou && lenBusca > 0){
+            posicoes[qtdOcorrencias * 2] = i + 1;  
+            posicoes[qtdOcorrencias * 2 + 1] = i + lenBusca;  
+            qtdOcorrencias++;
+        }
+    }
+    return qtdOcorrencias;
+}
 /*
  Q5 = inverte número
  @objetivo
@@ -275,8 +304,8 @@ int q5(int num)
 int q6(int numerobase, int numerobusca)
 {
     int qtdOcorrencias = 0;
-    int dBase[50];
-    int dBusca[50];
+    int digitosBase[50];
+    int digitosBusca[50];
     int tamBase = 0;
     int tamBusca = 0;
 
@@ -434,7 +463,7 @@ int ehBissexto(int ano){
     } else return 0;
 }
 
-int DiasNoMes(int mes, ano){
+int DiasNoMes(int mes, int ano){
     int dias[] = {31,28,31,30,31,30,31,31,30,31,30,31};
     if(mes == 2 && ehBissexto(ano)){
         return 29;
