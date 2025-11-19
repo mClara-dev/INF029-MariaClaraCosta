@@ -182,24 +182,33 @@ int q3(char *texto, char c, int isCaseSensitive)
 {
     int qtdOcorrencias = 0;
     
-    if (isCaseSensitive == 1){
-        for (int i = 0; texto[i] != '\0'; i++){
-            if (texto[i] == c){
+    if (isCaseSensitive != 1) {
+        NormalizarString(texto);
+    }
+    
+    for (int i = 0; texto[i] != '\0'; i++) {
+        if (isCaseSensitive == 1) {
+            if (texto[i] == c) {
                 qtdOcorrencias++;
             }
-        }    
-    }else{
-        char c_normalizado = NormalizarChar(c);
-        for (int i = 0; texto[i] != '\0'; i++){
-            char texto_char_normalizado = NormalizarChar(texto[i]);
-            if (texto_char_normalizado == c_normalizado){
+        } else {
+            char c_lower = c;
+            char c_upper = c;
+
+            if (c >= 'a' && c <= 'z') {
+                c_upper = c - 32;
+            } else if (c >= 'A' && c <= 'Z') {
+                c_lower = c + 32;
+            }
+            
+            if (texto[i] == c || texto[i] == c_lower || texto[i] == c_upper) {
                 qtdOcorrencias++;
             }
         }
     }
+    
     return qtdOcorrencias;
 }
-
 /*
  Q4 = encontrar palavra em texto
  @objetivo
@@ -217,33 +226,45 @@ int q3(char *texto, char c, int isCaseSensitive)
  */
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-    formatarPalavra(strTexto);
-    formatarPalavra(strBusca);
-	
-	int i, j, k, tam;
-    int qtdOcorrencias = 0;
-    int lenBusca = strlen(strBusca);
+    NormalizarString(strTexto);
+    NormalizarString(strBusca);
     
-    for (int i = 0; i < 30; i++){
+    int qtdOcorrencias = 0;
+    
+    int lenBusca = 0;
+    for(lenBusca = 0; strBusca[lenBusca] != '\0'; lenBusca++);
+    
+    for (int i = 0; i < 30; i++) {
         posicoes[i] = -1;
     }
     
-    for (int i = 0; strTexto[i] != '\0'; i++){
+    for (int i = 0; strTexto[i] != '\0'; i++) {
         int encontrou = 1;
         
-        for (int j = 0; j < lenBusca; j++){
-            if (strTexto[i + j] != strBusca[j]){
+        for (int j = 0; j < lenBusca; j++) {
+            if (strTexto[i + j] == '\0') {
+                encontrou = 0;
+                break;
+            }
+            
+            if (strTexto[i + j] != strBusca[j]) {
                 encontrou = 0;
                 break;
             }
         }
         
-        if (encontrou && lenBusca > 0){
-            posicoes[qtdOcorrencias * 2] = i + 1;  
-            posicoes[qtdOcorrencias * 2 + 1] = i + lenBusca;  
+        if (encontrou && lenBusca > 0) {
+            posicoes[qtdOcorrencias * 2] = i + 1;
+            posicoes[qtdOcorrencias * 2 + 1] = i + lenBusca;
+            
             qtdOcorrencias++;
+            
+            if (qtdOcorrencias * 2 >= 30) {
+                break;
+            }
         }
     }
+    
     return qtdOcorrencias;
 }
 /*
@@ -475,30 +496,25 @@ char ConvertepMinusculo(char c){
     return c;
 }
 
-char NormalizarChar(char c){
-    c = ConvertepMinusculo(c);
-    
-    switch (c){
-        case 'ã' : case 'â' : case 'á' : case 'à': case 'ä':
-            return 'a';
-        case 'é' : case 'è' : case 'ê' : case 'ë':
-            return 'e';
-        case 'í' : case 'ì' : case 'î' : case 'ï':
-            return 'i';
-        case 'õ' : case 'ô' : case 'ó' : case 'ò': case 'ö':
-            return 'o';
-        case 'ú' : case 'ù' : case 'û' : case 'ü':
-            return 'u';
-        case 'ç' :
-            return 'c';
-        default:
-            return c;
-    }
-}
-
-void formatarPalavra(char *str){
-    for(int i = 0; str[i] != '\0'; i++){
-        str[i] = NormalizarChar(str[i]);
+void NormalizarString(char *texto) {
+    int i, j, tam;
+    char cacento[] = "ÄÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛÙüúûù";
+    char sacento[] = "AAAAAAAAAAaaaaaaaaaaEEEEEEEEeeeeeeeeIIIIIIIIiiiiiiiiOOOOOOOOOOooooooooooUUUUUUUUuuuuuuuu";
+	
+    for(tam = 0; texto[tam] != '\0'; tam++);
+	
+    for(i = 0; texto[i] != '\0'; i++){
+        for(j = 0; cacento[j] != '\0'; j++) {
+            if(texto[i] == cacento[j] && texto[i+1] == cacento[j+1]) {
+                texto[i] = sacento[j];
+                for (int k = i + 1; k < tam - 1; k++) {
+                    texto[k] = texto[k+1];
+                }
+                texto[tam - 1] = '\0';
+                tam--;
+                break;
+            }
+        }
     }
 }
 
