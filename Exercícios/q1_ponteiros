@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+int main()
+{
+    printf("Lista ponteiros Q1:\n");
+    
+    int inteiro;
+    char caractere;
+    char string[10];
+    float quebrado;
+    double longo;
+    
+    int *pInteiro = &inteiro;
+    char *pCaractere = &caractere;
+    char *pString = string;
+    float *pQuebrado = &quebrado;
+    double *pLongo = &longo;
+    
+    printf("Insira um inteiro:\n");
+    scanf("%d", &inteiro);
+    while (getchar() != '\n');
+    printf("\n");
+    printf("Insira um caractere:\n");
+    scanf("%c", &caractere);
+    while (getchar() != '\n');
+    printf("\n");
+    printf("Insira uma string:\n");
+    scanf("%9s", string);
+    while (getchar() != '\n');
+    printf("\n");
+    printf("Insira um float:\n");
+    scanf("%f", &quebrado);
+    while (getchar() != '\n');
+    printf("\n");
+    printf("Insira um double:\n");
+    scanf("%lf", &longo);
+ 
+    printf("\n");
+    printf("Acesso por meio das variáveis primitivas:\n");
+    printf("Inteiro: %d\n", inteiro);
+    printf("Caractere: %c\n", caractere);
+    printf("String: %s\n", string);
+    printf("Float: %f\n", quebrado);
+    printf("Double: %lf\n", longo);
+    
+    printf("Acesso por meio dos ponteiros:\n");
+    printf("Inteiro: %d\n", *pInteiro);
+    printf("Caractere: %c\n", *pCaractere);
+    printf("String: %s\n", pString );
+    printf("Float: %f\n", *pQuebrado);
+    printf("Double: %lf\n",*pLongo);
+
+    return 0;
+}
