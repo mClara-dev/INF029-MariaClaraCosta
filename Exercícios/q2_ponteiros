@@ -1,1 +1,27 @@
+#include <stdio.h>
 
+int suap(int *a, int *b){
+    
+    int troca;
+    
+    troca = *a;
+    *a = *b;
+    *b = troca;
+}
+
+
+int main()
+{
+    int x, y;
+    
+    printf("Insira os dois números:\n");
+    scanf("%d %d", &x, &y);
+    
+    printf("\nAntes da troca: %d %d\n", x, y);
+    
+    suap(&x, &y);
+    
+    printf("Depois da troca: %d %d", x, y);
+    
+    return 0;
+}
