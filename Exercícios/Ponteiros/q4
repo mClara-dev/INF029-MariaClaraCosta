@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor;
+    struct No *proximo;
+} No;
+
+void insere(No **topo, int valor) {
+    No *novo = (No*)malloc(sizeof(No));
+    novo->valor = valor;
+    novo->proximo = *topo;
+    *topo = novo;
+}
+
+int main() {
+    No *topo = NULL;
+    int n, valor;
+    
+    printf("Quantos valores? ");
+    scanf("%d", &n);
+    
+    for(int i = 0; i < n; i++) {
+        printf("Valor %d: ", i + 1);
+        scanf("%d", &valor);
+        insere(&topo, valor);
+    }
+    
+    printf("\nPilha (topo -> base): "); // func pra mostrar a pilha - verificar
+    No *atual = topo;
+    while(atual != NULL) {
+        printf("[%d] ", atual->valor);
+        atual = atual->proximo;
+    }
+    
+    while(topo != NULL) { // liberar memória
+        No *temp = topo;
+        topo = topo->proximo;
+        free(temp);
+    }
+    
+    return 0;
+}
