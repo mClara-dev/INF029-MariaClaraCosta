@@ -12,6 +12,7 @@ typedef struct {
 
 EstruturaAuxiliar vetorPrincipal[TAM];
 
+
 //FUNCOES AUXILIARES:
 
 int ehPosicaoValida(int posicao){
@@ -25,17 +26,13 @@ int existeEstrutura(int posicao)
     return (vetorPrincipal[posicao].dados != NULL) ? 1 : 0;
 }
 
-void ordenaVetor(int vetor[], int N) {
-    selectionSort(vetor, N);
-}
-
 void selectionSort(int vetor[], int N){
     int min, aux, i, j;
 
     for(i = 0; i < N; i ++){
         min = i;
         for( j = i + 1; j < N; j++){
-            if(vetor[j] < vetor[min]{
+            if(vetor[j] < vetor[min]){
                 min = j; 
             }
         }   
@@ -44,6 +41,11 @@ void selectionSort(int vetor[], int N){
         vetor[min] = aux;
     }
 }
+
+void ordenaVetor(int vetor[], int N) {
+    selectionSort(vetor, N);
+}
+
 
 //FUNCOES PRINCIPAIS
 
@@ -80,8 +82,8 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
         return SEM_ESPACO_DE_MEMORIA;
     }
 
-    vetorPrincipal[indice].tamanhoMaximo = tamanho;
-    vetorPrincipal[indice].quantidadeElementos = 0;
+    vetorPrincipal[indice].tamMaximo = tamanho;
+    vetorPrincipal[indice].qtdElementos = 0;
     
     return SUCESSO;
 }
@@ -107,11 +109,11 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
         return SEM_ESTRUTURA_AUXILIAR;
     }
     
-    if (vetorPrincipal[indice].quantidadeElementos < vetorPrincipal[indice].tamanhoMaximo) {
+    if (vetorPrincipal[indice].qtdElementos < vetorPrincipal[indice].tamMaximo) {
         
-        int posInsercao = vetorPrincipal[indice].quantidadeElementos;
+        int posInsercao = vetorPrincipal[indice].qtdElementos;
         vetorPrincipal[indice].dados[posInsercao] = valor;
-        vetorPrincipal[indice].quantidadeElementos++;
+        vetorPrincipal[indice].qtdElementos++;
         
         return SUCESSO;
     }
